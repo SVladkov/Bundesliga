@@ -1,0 +1,21 @@
+{% if all_matches_data %}
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Team A</th>
+            <th>Team B</th>
+            <th>Result</th>
+        </tr>
+    {% for match in all_matches_data %}
+        <tr>
+            <td><a>{{ match.MatchDateTime }}</a></td>
+            <td><a>{{ match.Team1.TeamName }}</a></td>
+            <td><a>{{ match.Team2.TeamName }}</a></td>
+            <td><a>{{ match.MatchResults.0.PointsTeam1 }} : {{ match.MatchResults.0.PointsTeam2 }}</a></td>
+        </tr>
+
+    {% endfor %}
+    </table>
+{% else %}
+    <p>No matches are available.</p>
+{% endif %}
