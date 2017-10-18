@@ -1,4 +1,4 @@
-{% if all_matches_data %}
+{% if matches_data %}
     <table>
         <tr>
             <th>Date</th>
@@ -6,7 +6,7 @@
             <th>Team B</th>
             <th>Result</th>
         </tr>
-    {% for match in all_matches_data %}
+    {% for match in matches_data %}
         <tr>
             <td><a>{{ match.MatchDateTime }}</a></td>
             <td><a>{{ match.Team1.TeamName }}</a></td>
