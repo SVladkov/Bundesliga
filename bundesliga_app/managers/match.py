@@ -23,7 +23,7 @@ def get_gameday(league_shortcut):
     url = BASE_URL + 'getcurrentgroup/' + league_shortcut
     response_as_json = get_url_response_as_json(url)
     group_name = response_as_json['GroupName']
-    gameday = group_name.split('.')[0]
+    gameday = int(group_name.split('.')[0])
 
     return gameday
 
@@ -37,11 +37,15 @@ def get_current_season(league_shortcut):
     return current_season
 
 
+def gameday_of_a_match(match):
+    return int(match['Group']['GroupName'].split('.')[0])
+
+
 def get_next_matches(league_shortcut):
     gameday = get_gameday(league_shortcut)
     current_season = get_current_season(league_shortcut)
 
     all_matches_data = get_all_matches(league_shortcut, current_season)
-    next_matches_data = [match for match in all_matches_data if int(match['Group']['GroupName'].split('.')[0]) > int(gameday)]
+    next_matches_data = [match for match in all_matches_data if gameday_of_a_match(match) > gameday]
 
     return next_matches_data
