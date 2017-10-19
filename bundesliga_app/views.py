@@ -4,12 +4,14 @@ from bundesliga_app.managers.match import (
     get_all_matches,
     get_next_matches
 )
+from bundesliga_app.models import Team
+from datetime import datetime
 
 def index(request):
     return HttpResponse("Hello world")
 
-def all_matches(request, league_shortcut, league_season):
-    all_matches_data = get_all_matches(league_shortcut, league_season)
+def all_matches(request, league_shortcut):
+    all_matches_data = get_all_matches(league_shortcut)
 
     context = {
         'matches_data': all_matches_data
@@ -23,5 +25,8 @@ def next_matches(request, league_shortcut):
     context = {
         'matches_data': next_matches_data
     }
+
+    a = Team(name='Team', wins=1, loses=3)
+    a.save()
 
     return render(request, 'bundesliga_app/index.html', context)

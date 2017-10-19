@@ -17,3 +17,8 @@ class Match(models.Model):
     season = models.IntegerField()
     league = models.IntegerField()
     is_finished = models.BooleanField(default=False)
+
+class Last_Checked(models.Model):
+    season = models.IntegerField()
+    gameday = models.IntegerField()
+    date = models.DateTimeField()
