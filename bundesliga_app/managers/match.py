@@ -1,56 +1,87 @@
-import urllib
-import json
 from bundesliga_app.models import (
     Last_Checked,
     Match,
-    Team
+    Team,
+    Wins_Losses_Season
 )
 from datetime import datetime
 from dateutil.parser import parse
 import pytz
+from bundesliga_app.managers.remote_data import (
+    get_current_gameday,
+    get_current_season,
+    get_last_change_date,
+    poll_all_matches
+)
 
-
+from bundesliga_app.utils import get_url_response_as_json
 BASE_URL = 'https://www.openligadb.de/api/'
 
 
-def get_current_gameday(league_shortcut):
-    url = BASE_URL + 'getcurrentgroup/' + league_shortcut
-    response_as_json = get_url_response_as_json(url)
-    group_name = response_as_json['GroupName']
-    gameday = int(group_name.split('.')[0])
+def create_wins_losses_season(team_id, league_shortcut, league_season):
+    new_wins_losses_season = Wins_Losses_Season(
+        team_id=team_id,
+        wins=0,
+        loses=0,
+        season=league_season,
+        league=league_shortcut
+    )
 
-    return gameday
-
-
-def get_current_season(league_shortcut):
-    url = BASE_URL + 'getmatchdata/' + league_shortcut
-    current_group = get_url_response_as_json(url)
-    league_name = current_group[0]['LeagueName']
-    current_season = league_name[-9:-5]
-
-    return current_season
+    new_wins_losses_season.save()
 
 
-def get_url_response_as_json(url):
-    response = urllib.request.urlopen(url).read()
-    response_as_string = response.decode(encoding='UTF-8')
-    response_as_json = json.loads(response_as_string)
+def update_teams(league_shortcut, league_season):
+    url = BASE_URL + 'getavailableteams/' + league_shortcut + '/' + league_season
+    teams = get_url_response_as_json(url)
 
-    return response_as_json
+    for team in teams:
+        try:
+            # This could happen at the beginning of new season
+            Team.objects.get(team_id=team['TeamId'])
+            create_wins_losses_season(team['TeamId'], league_shortcut, league_season)
+
+        except Exception as e:
+            # This could happen only if the team was never in the system
+            new_team = Team(team_id=team['TeamId'], name=team['TeamName'])
+            new_team.save()
+
+            create_wins_losses_season(team['TeamId'], league_shortcut, league_season)
 
 
-def get_last_change_date(league_shortcut, league_season, league_gameday):
-    url = BASE_URL + 'getlastchangedate/' + league_shortcut + '/' + league_season + '/' + str(league_gameday)
-    last_change_date = get_url_response_as_json(url)
+def create_match(match, league_shortcut, league_season):
+    if not match['MatchIsFinished']:
+        points_one = None
+        points_two = None
+    else:
+        points_one = match['MatchResults'][1]['PointsTeam1']
+        points_two = match['MatchResults'][1]['PointsTeam2']
 
-    return last_change_date
+    new_match = Match(
+        match_id=match['MatchID'],
+        date=match['MatchDateTimeUTC'],
+        team_one_id=match['Team1']['TeamId'],
+        team_two_id=match['Team2']['TeamId'],
+        points_one=points_one,
+        points_two=points_two,
+        season=league_season,
+        league=league_shortcut,
+        is_finished=match['MatchIsFinished']
+    )
+    new_match.save()
 
 
-def poll_all_matches(league_shortcut, league_season):
-    url = BASE_URL + 'getmatchdata/' + league_shortcut + '/' + league_season
-    all_matches_data = get_url_response_as_json(url)
+def create_season(league_shortcut, league_season):
+    update_teams(league_shortcut, league_season)
 
-    return all_matches_data
+    all_matches_data = poll_all_matches(league_shortcut, league_season)
+    for match in all_matches_data:
+        create_match(match, league_shortcut, league_season)
+
+
+def update_season(league_shortcut, league_season, last_checked_gameday):
+    # update just some of the gamedays
+    all_matches_data = poll_all_matches(league_shortcut, league_season)
+
 
 
 def update_matches_if_needed(league_shortcut):
@@ -60,13 +91,33 @@ def update_matches_if_needed(league_shortcut):
     last_checked = Last_Checked.objects.all()
     last_change_date = get_last_change_date(league_shortcut, current_season, current_gameday)
 
-    if len(last_checked) == 0 or last_checked[0].date != parse(last_change_date).replace(tzinfo=pytz.utc):
+    if len(last_checked) == 0:
+        # if application is never used before
         new_check = Last_Checked(season=current_season, gameday=current_gameday, date=last_change_date)
         new_check.save()
 
-        all_matches_data = poll_all_matches(league_shortcut, current_season)
+        create_season(league_shortcut, current_season)
 
-        print(all_matches_data)
+    elif last_checked[0].date != parse(last_change_date).replace(tzinfo=pytz.utc):
+        last_checked_season = last_checked[0].season
+        last_checked_gameday = last_checked[0].gameday
+
+        new_check = Last_Checked(season=current_season, gameday=current_gameday, date=last_change_date)
+        new_check.save()
+
+        if last_checked_season != current_season:
+            #get data about the season and directly write it in the database
+            create_season(league_shortcut, current_season)
+
+        elif last_checked_gameday != current_gameday:
+            #get data about the season and update just some gamedays
+            update_season(league_shortcut, current_season, last_checked_gameday)
+        else:
+            #get data about the gameday and update just it
+            pass
+
+    all_matches_data = poll_all_matches(league_shortcut, current_season)
+    print(all_matches_data[0]['MatchID'])
 
 
 def get_all_matches(league_shortcut):

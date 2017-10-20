@@ -11,14 +11,14 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RenameField(
+        migrations.AlterField(
             model_name='match',
-            old_name='team_one_id',
-            new_name='team_one',
+            name='points_one',
+            field=models.IntegerField(default=0, null=True),
         ),
-        migrations.RenameField(
+        migrations.AlterField(
             model_name='match',
-            old_name='team_two_id',
-            new_name='team_two',
+            name='points_two',
+            field=models.IntegerField(default=0, null=True),
         ),
     ]
