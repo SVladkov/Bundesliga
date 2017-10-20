@@ -29,6 +29,7 @@ class Match(models.Model):
 
 
 class Last_Checked(models.Model):
+    league = models.CharField(max_length=3)
     season = models.IntegerField()
     gameday = models.IntegerField()
     date = models.DateTimeField()

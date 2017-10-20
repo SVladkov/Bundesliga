@@ -1,0 +1,23 @@
+{% include 'bundesliga_app/partials/header.html' %}
+    {% if win_loss_ratio_data %}
+        <table>
+            <tr>
+                <th>Team</th>
+                <th>Wins</th>
+                <th>Losses</th>
+                <th>Ratio</th>
+            </tr>
+        {% for team in win_loss_ratio_data %}
+            <tr>
+                <td><a>{{ team.team_name }}</a></td>
+                <td><a>{{ team.wins }}</a></td>
+                <td><a>{{ team.losses }}</a></td>
+                <td><a>{{ team.ratio }}</a></td>
+            </tr>
+
+        {% endfor %}
+        </table>
+    {% else %}
+        <p>No matches are available.</p>
+    {% endif %}
+{% include 'bundesliga_app/partials/footer.html' %}

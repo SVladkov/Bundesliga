@@ -98,6 +98,8 @@ def update_points(league_shortcut, league_season):
 
     unfinished_matches = local_database.get_unfinished_matches(league_shortcut, league_season)
     for match in unfinished_matches:
+        import pprint
+        pprint.pprint(match)
         match_new_data = all_matches_data_as_dict[int(match.match_id)]
 
         update_match_points(match, match_new_data)
@@ -108,17 +110,18 @@ def update_matches_if_needed(league_shortcut):
     current_season = poll_current_season(league_shortcut)
     current_gameday = poll_current_gameday(league_shortcut)
 
-    last_checked = Last_Checked.objects.all()
+    last_checked = Last_Checked.objects.filter(league=league_shortcut)
     last_change_date = poll_last_change_date(league_shortcut, current_season, current_gameday)
 
     if len(last_checked) == 0:
         # if application is never used before
-        new_check = Last_Checked(season=current_season, gameday=current_gameday, date=last_change_date)
+        new_check = Last_Checked(season=current_season, gameday=current_gameday, date=last_change_date, league=league_shortcut)
         new_check.save()
 
         create_season(league_shortcut, current_season)
 
     elif last_checked[0].date != parse(last_change_date).replace(tzinfo=pytz.utc):
+        print("do we come heere")
         last_checked_season = last_checked[0].season
         last_checked_gameday = last_checked[0].gameday
 
@@ -156,12 +159,9 @@ def gameday_of_a_match(match):
 def get_next_matches(league_shortcut):
     current_season = poll_current_season(league_shortcut)
     current_gameday = poll_current_gameday(league_shortcut)
+    update_matches_if_needed(league_shortcut)
 
     matches = local_database.get_matches_after_gameday(league_shortcut, current_season, current_gameday)
     transformed_matches = transform_matches(matches)
-    #print(transformed_matches)
-
-    #all_matches_data = get_all_matches(league_shortcut)
-    #next_matches_data = [match for match in all_matches_data if gameday_of_a_match(match) > current_gameday]
 
     return transformed_matches

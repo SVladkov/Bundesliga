@@ -1,21 +1,23 @@
-{% if matches_data %}
-    <table>
-        <tr>
-            <th>Date</th>
-            <th>Team A</th>
-            <th>Team B</th>
-            <th>Result</th>
-        </tr>
-    {% for match in matches_data %}
-        <tr>
-            <td><a>{{ match.date }}</a></td>
-            <td><a>{{ match.team_one }}</a></td>
-            <td><a>{{ match.points_one }} : {{ match.points_two }}</a></td>
-            <td><a>{{ match.team_two }}</a></td>
-        </tr>
+{% include 'bundesliga_app/partials/header.html' %}
+    {% if matches_data %}
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Team A</th>
+                <th>Team B</th>
+                <th>Result</th>
+            </tr>
+        {% for match in matches_data %}
+            <tr>
+                <td><a>{{ match.date }}</a></td>
+                <td><a>{{ match.team_one }}</a></td>
+                <td><a>{{ match.points_one }} : {{ match.points_two }}</a></td>
+                <td><a>{{ match.team_two }}</a></td>
+            </tr>
 
-    {% endfor %}
-    </table>
-{% else %}
-    <p>No matches are available.</p>
-{% endif %}
+        {% endfor %}
+        </table>
+    {% else %}
+        <p>No matches are available.</p>
+    {% endif %}
+{% include 'bundesliga_app/partials/footer.html' %}

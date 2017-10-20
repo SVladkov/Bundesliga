@@ -50,7 +50,13 @@ def get_all_matches(league_shortcut, league_season):
     return matches
 
 
-def get_matches_after_gameday(league_shortcyt, league_season, current_gameday):
-    matches = Match.objects.filter(league=league_shortcyt, season=league_season, gameday__gt=current_gameday)
+def get_matches_after_gameday(league_shortcut, league_season, current_gameday):
+    matches = Match.objects.filter(league=league_shortcut, season=league_season, gameday__gt=current_gameday)
 
     return matches
+
+
+def get_wins_losses(league_shortcut, league_season):
+    win_loss_ratios = Wins_Losses_Season.objects.filter(league=league_shortcut, season=league_season)
+
+    return win_loss_ratios
