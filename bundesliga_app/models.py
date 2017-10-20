@@ -24,6 +24,7 @@ class Match(models.Model):
     points_two = models.IntegerField(default=0, null=True)
     season = models.IntegerField()
     league = models.CharField(max_length=3)
+    gameday = models.IntegerField()
     is_finished = models.BooleanField(default=False)
 
 

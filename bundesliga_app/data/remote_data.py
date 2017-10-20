@@ -2,7 +2,7 @@ from bundesliga_app.utils import get_url_response_as_json
 
 BASE_URL = 'https://www.openligadb.de/api/'
 
-def get_current_gameday(league_shortcut):
+def poll_current_gameday(league_shortcut):
     url = BASE_URL + 'getcurrentgroup/' + league_shortcut
     response_as_json = get_url_response_as_json(url)
     group_name = response_as_json['GroupName']
@@ -11,7 +11,7 @@ def get_current_gameday(league_shortcut):
     return gameday
 
 
-def get_current_season(league_shortcut):
+def poll_current_season(league_shortcut):
     url = BASE_URL + 'getmatchdata/' + league_shortcut
     current_group = get_url_response_as_json(url)
     league_name = current_group[0]['LeagueName']
@@ -20,7 +20,7 @@ def get_current_season(league_shortcut):
     return current_season
 
 
-def get_last_change_date(league_shortcut, league_season, league_gameday):
+def poll_last_change_date(league_shortcut, league_season, league_gameday):
     url = BASE_URL + 'getlastchangedate/' + league_shortcut + '/' + league_season + '/' + str(league_gameday)
     last_change_date = get_url_response_as_json(url)
 
@@ -34,7 +34,7 @@ def poll_all_matches(league_shortcut, league_season):
     return all_matches_data
 
 
-def get_teams(league_shortcut, league_season):
+def poll_teams(league_shortcut, league_season):
     url = BASE_URL + 'getavailableteams/' + league_shortcut + '/' + league_season
     teams = get_url_response_as_json(url)
 
