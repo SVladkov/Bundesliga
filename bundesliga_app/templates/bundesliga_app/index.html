@@ -2,16 +2,20 @@
     <table>
         <tr>
             <th>Date</th>
+            <th>Team A id</th>
             <th>Team A</th>
+            <th>Team B id</th>
             <th>Team B</th>
             <th>Result</th>
         </tr>
     {% for match in matches_data %}
         <tr>
             <td><a>{{ match.MatchDateTime }}</a></td>
+            <td><a>{{ match.Team1.TeamId }}</a></td>
             <td><a>{{ match.Team1.TeamName }}</a></td>
-            <td><a>{{ match.Team2.TeamName }}</a></td>
             <td><a>{{ match.MatchResults.1.PointsTeam1 }} : {{ match.MatchResults.1.PointsTeam2 }}</a></td>
+            <td><a>{{ match.Team2.TeamId }}</a></td>
+            <td><a>{{ match.Team2.TeamName }}</a></td>
         </tr>
 
     {% endfor %}

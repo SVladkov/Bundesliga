@@ -32,3 +32,10 @@ def poll_all_matches(league_shortcut, league_season):
     all_matches_data = get_url_response_as_json(url)
 
     return all_matches_data
+
+
+def get_teams(league_shortcut, league_season):
+    url = BASE_URL + 'getavailableteams/' + league_shortcut + '/' + league_season
+    teams = get_url_response_as_json(url)
+
+    return teams
