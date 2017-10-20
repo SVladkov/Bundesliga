@@ -10,7 +10,7 @@ def index(request):
     return HttpResponse("Hello world")
 
 
-def all_matches(request, league_shortcut):
+def all_matches(request, league_shortcut='bl1'):
     all_matches_data = get_all_matches(league_shortcut)
 
     context = {

@@ -29,6 +29,7 @@ def transform_wins_losses(wins_losses):
         team = Team.objects.get(team_id=wins_losses_team.team_id)
         try:
             ratio = wins_losses_team.wins / wins_losses_team.loses
+            ratio = "%.2f" % ratio
         except ZeroDivisionError:
             ratio = 'No losses'
 
