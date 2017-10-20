@@ -29,10 +29,9 @@ def next_matches(request, league_shortcut):
 
     return render(request, 'bundesliga_app/index.html', context)
 
+
 def win_loss_ratio(request, league_shortcut):
     win_loss_ratio_data = win_loss_ratios(league_shortcut)
-
-    print(win_loss_ratio_data)
 
     context = {
         'win_loss_ratio_data': win_loss_ratio_data

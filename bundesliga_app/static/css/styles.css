@@ -1,0 +1,15 @@
+header {
+    width:85%;
+    text-align: left;
+}
+
+#content {
+    background-color:#f6f6ef;
+    width:85%;
+    text-align: left;
+    margin-top: 10px
+}
+
+td, th {
+    padding-right: 40px
+}

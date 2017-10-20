@@ -3,13 +3,33 @@
     <head>
         <meta charset="utf-8">
         <title>Bundesliga Results</title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     </head>
     <body>
-        <header>
-            <h1>
-                Bundesliga Results
-            </h1>
-            <a href="/allmatches/bl1">All matches</a>
-            <a href="/nextmatches/bl1">Next matches</a>
-            <a href="/winlossratio/bl1">Win/Loss ratio</a>
-        </header>
+        <center>
+            <header>
+                <h1>
+                    Bundesliga Results
+                </h1>
+                <div>
+                    Bundesliga 1
+                    <a href="/allmatches/bl1">All matches</a>
+                    <a href="/nextmatches/bl1">Next matches</a>
+                    <a href="/winlossratio/bl1">Win/Loss ratio</a>
+                </div>
+                <div>
+                    Bundesliga 2
+                    <a href="/allmatches/bl2">All matches</a>
+                    <a href="/nextmatches/bl2">Next matches</a>
+                    <a href="/winlossratio/bl2">Win/Loss ratio</a>
+                </div>
+                <div>
+                    Bundesliga 3
+                    <a href="/allmatches/bl3">All matches</a>
+                    <a href="/nextmatches/bl3">Next matches</a>
+                    <a href="/winlossratio/bl3">Win/Loss ratio</a>
+                </div>
+            </header>
+
+            <div id="content">

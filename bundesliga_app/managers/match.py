@@ -4,7 +4,6 @@ from bundesliga_app.models import (
     Team,
     Wins_Losses_Season
 )
-from datetime import datetime
 from dateutil.parser import parse
 import pytz
 from bundesliga_app.data.remote_data import (
@@ -19,9 +18,6 @@ from bundesliga_app.data import local_database
 from bundesliga_app.data.transformers import (
     transform_matches
 )
-
-from bundesliga_app.utils import get_url_response_as_json
-BASE_URL = 'https://www.openligadb.de/api/'
 
 
 def update_teams(league_shortcut, league_season):
@@ -87,7 +83,6 @@ def update_team_points(match_new_data):
             team_one_wins_losses_season.save(update_fields=['loses'])
             team_two_wins_losses_season.save(update_fields=['wins'])
     except Exception as e:
-        print(e)
         pass
 
 
@@ -98,8 +93,6 @@ def update_points(league_shortcut, league_season):
 
     unfinished_matches = local_database.get_unfinished_matches(league_shortcut, league_season)
     for match in unfinished_matches:
-        import pprint
-        pprint.pprint(match)
         match_new_data = all_matches_data_as_dict[int(match.match_id)]
 
         update_match_points(match, match_new_data)
@@ -121,7 +114,6 @@ def update_matches_if_needed(league_shortcut):
         create_season(league_shortcut, current_season)
 
     elif last_checked[0].date != parse(last_change_date).replace(tzinfo=pytz.utc):
-        print("do we come heere")
         last_checked_season = last_checked[0].season
         last_checked_gameday = last_checked[0].gameday
 
