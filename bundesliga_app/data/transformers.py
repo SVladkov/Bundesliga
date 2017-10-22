@@ -43,3 +43,43 @@ def transform_wins_losses(wins_losses):
         result.append(transformed_wins_losses)
 
     return result
+
+
+def transform_teams(teams):
+    result = []
+
+    for team in teams:
+        transformed_team = {
+            'id': team.team_id,
+            'name': team.name
+        }
+
+        result.append(transformed_team)
+        print(transformed_team)
+
+    return result
+
+
+def transform_team(wins_losses, matches):
+    try:
+        ratio = wins_losses.wins / wins_losses.loses
+        ratio = "%.2f" % ratio
+    except ZeroDivisionError:
+        ratio = 'No losses'
+
+    league_shortcuts = {
+        'bl1': 'Bundesliga 1',
+        'bl2': 'Bundesliga 2',
+        'bl3': 'Bundesliga 3'
+    }
+
+    transformed_team = {
+        'name': wins_losses.team.name,
+        'wins': wins_losses.wins,
+        'losses': wins_losses.loses,
+        'ratio': ratio,
+        'league': league_shortcuts[wins_losses.league],
+        'matches': transform_matches(matches)
+    }
+
+    return transformed_team

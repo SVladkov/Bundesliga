@@ -1,0 +1,15 @@
+{% include 'bundesliga_app/partials/header.html' %}
+    {% if teams %}
+        <h2>Search for: {{ search_name }}</h2>
+        <table>
+        {% for team in teams %}
+            <tr>
+                <td><a href="/bundesliga_app/teams/{{ team.id }}">{{ team.name }}</a></td>
+            </tr>
+
+        {% endfor %}
+        </table>
+    {% else %}
+        <h2>No teams found.</h2>
+    {% endif %}
+{% include 'bundesliga_app/partials/footer.html' %}

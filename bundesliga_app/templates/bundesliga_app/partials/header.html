@@ -10,7 +10,7 @@
         <center>
             <header>
                 <h1>
-                    Bundesliga Results
+                    <a href="/bundesliga_app/allmatches/bl1">Bundesliga Results</a>
                 </h1>
                 <div>
                     Bundesliga 1
@@ -30,6 +30,10 @@
                     <a href="/bundesliga_app/nextmatches/bl3">Next matches</a>
                     <a href="/bundesliga_app/winlossratio/bl3">Win/Loss ratio</a>
                 </div>
-            </header>
 
+                <form id="searchbox" method="get" action="/bundesliga_app/teams/">
+                    <input type="text" placeholder="Search" name="name">
+                    <input type="submit" value="Search">
+                </form>
+            </header>
             <div id="content">

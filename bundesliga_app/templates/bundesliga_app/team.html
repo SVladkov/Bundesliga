@@ -1,0 +1,35 @@
+{% include 'bundesliga_app/partials/header.html' %}
+    {% if team %}
+        <h2>{{ team.name }}</h2>
+        <div>Wins: {{ team.wins }}</div>
+        <div>Losses: {{ team.losses }}</div>
+        <div>Wins/Losses ratio: {{ team.ratio }}</div>
+        <div>League: {{ team.league }}</div>
+
+        </br>
+        <h3>Matches</h3>
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Team A</th>
+                <th>Result</th>
+                <th>Team B</th>
+            </tr>
+        {% for match in team.matches %}
+            <tr>
+                <td><a>{{ match.date }}</a></td>
+                <td><a>{{ match.team_one }}</a></td>
+                {% if match.points_one != None %}
+                    <td><a>{{ match.points_one }} : {{ match.points_two }}</a></td>
+                {% else %}
+                    <td><a>Not finished</a></td>
+                {% endif %}
+                <td><a>{{ match.team_two }}</a></td>
+            </tr>
+
+        {% endfor %}
+        </table>
+    {% else %}
+        <h2>No teams found.</h2>
+    {% endif %}
+{% include 'bundesliga_app/partials/footer.html' %}

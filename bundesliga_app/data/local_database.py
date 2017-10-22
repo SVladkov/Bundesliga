@@ -1,7 +1,9 @@
 from bundesliga_app.models import (
     Match,
-    Wins_Losses_Season
+    Wins_Losses_Season,
+    Team
 )
+from django.db.models import Q
 
 def create_wins_losses_season(team_id, league_shortcut, league_season):
     new_wins_losses_season = Wins_Losses_Season(
@@ -60,3 +62,22 @@ def get_wins_losses(league_shortcut, league_season):
     win_loss_ratios = Wins_Losses_Season.objects.filter(league=league_shortcut, season=league_season)
 
     return win_loss_ratios
+
+
+def get_teams_with_name(team_name):
+    #teams = Wins_Losses_Season.objects.filter(team__name__icontains='Leipzig').select_related()
+    teams = Team.objects.filter(name__icontains=team_name)
+
+    return teams
+
+
+def get_wins_losses_for_team(team_id):
+    wins_losses_for_team = Wins_Losses_Season.objects.get(team_id=team_id)
+
+    return wins_losses_for_team
+
+
+def get_matches_for_team(team_id):
+    matches = Match.objects.filter(Q(team_one_id=team_id) | Q(team_two_id=team_id)).select_related()
+
+    return matches

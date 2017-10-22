@@ -13,3 +13,7 @@ header {
 td, th {
     padding-right: 40px
 }
+
+#searchbox {
+    text-align: right
+}
