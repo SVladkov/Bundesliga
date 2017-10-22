@@ -41,7 +41,7 @@ def create_match(match, league_shortcut, league_season):
 
 
 def get_unfinished_matches(league_shortcut, league_season):
-    unfinished_matches = Match.objects.filter(is_finished=False)
+    unfinished_matches = Match.objects.filter(league=league_shortcut, is_finished=False)
 
     return unfinished_matches
 

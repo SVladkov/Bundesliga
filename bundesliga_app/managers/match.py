@@ -47,7 +47,7 @@ def create_season(league_shortcut, league_season):
 
 
 def update_match_points(match_old_data, match_new_data):
-    try:
+    if match_new_data['MatchIsFinished']:
         points_one = match_new_data['MatchResults'][1]['PointsTeam1']
         points_two = match_new_data['MatchResults'][1]['PointsTeam2']
 
@@ -55,12 +55,10 @@ def update_match_points(match_old_data, match_new_data):
         match_old_data.points_two = points_two
         match_old_data.is_finished = True
         match_old_data.save(update_fields=['points_one', 'points_two', 'is_finished'])
-    except Exception as e:
-        pass
 
 
 def update_team_points(match_new_data):
-    try:
+    if match_new_data['MatchIsFinished']:
         team_one_id = match_new_data['Team1']['TeamId']
         team_two_id = match_new_data['Team2']['TeamId']
 
@@ -82,8 +80,6 @@ def update_team_points(match_new_data):
 
             team_one_wins_losses_season.save(update_fields=['loses'])
             team_two_wins_losses_season.save(update_fields=['wins'])
-    except Exception as e:
-        pass
 
 
 def update_points(league_shortcut, league_season):
