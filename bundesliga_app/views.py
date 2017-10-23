@@ -58,18 +58,11 @@ def teams(request):
         'teams': teams
     }
 
-    #import json
-    #return HttpResponse(json.dumps(teams), content_type='application/json')
-
     return render(request, 'bundesliga_app/teams.html', context)
 
 
 def team(request, team_id):
     team = search_team(team_id)
-
-    import json
-    #return HttpResponse(json.dumps(team), content_type='application/json')
-    #return HttpResponse(team_id)
 
     context = {
         'team': team

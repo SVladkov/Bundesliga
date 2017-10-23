@@ -1,7 +1,3 @@
-from bundesliga_app.models import (
-    Team
-)
-
 from bundesliga_app.utils import LEAGUE_SHORTCUTS_TO_FULL_NAMES
 
 def transform_matches(matches):
