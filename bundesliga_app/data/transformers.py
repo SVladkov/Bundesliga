@@ -2,15 +2,19 @@ from bundesliga_app.models import (
     Team
 )
 
+from bundesliga_app.utils import LEAGUE_SHORTCUTS_TO_FULL_NAMES
+
 def transform_matches(matches):
     result = []
 
     for match in matches:
-        team_one = Team.objects.get(team_id=match.team_one_id).name
-        team_two = Team.objects.get(team_id=match.team_two_id).name
+        team_one = match.team_one.name
+        team_two = match.team_two.name
 
         transformed_match = {
             'date': match.date,
+            'team_one_id': match.team_one_id,
+            'team_two_id': match.team_two_id,
             'team_one': team_one,
             'team_two': team_two,
             'points_one': match.points_one,
@@ -26,7 +30,7 @@ def transform_wins_losses(wins_losses):
     result = []
 
     for wins_losses_team in wins_losses:
-        team = Team.objects.get(team_id=wins_losses_team.team_id)
+        team = wins_losses_team.team.name
         try:
             ratio = wins_losses_team.wins / wins_losses_team.loses
             ratio = "%.2f" % ratio
@@ -34,7 +38,7 @@ def transform_wins_losses(wins_losses):
             ratio = 'No losses'
 
         transformed_wins_losses = {
-            'team_name': team.name,
+            'team_name': team,
             'wins': wins_losses_team.wins,
             'losses': wins_losses_team.loses,
             'ratio': ratio
@@ -60,26 +64,21 @@ def transform_teams(teams):
     return result
 
 
-def transform_team(wins_losses, matches):
+def transform_team(wins_losses, past_matches, next_matches):
     try:
         ratio = wins_losses.wins / wins_losses.loses
         ratio = "%.2f" % ratio
     except ZeroDivisionError:
         ratio = 'No losses'
 
-    league_shortcuts = {
-        'bl1': 'Bundesliga 1',
-        'bl2': 'Bundesliga 2',
-        'bl3': 'Bundesliga 3'
-    }
-
     transformed_team = {
         'name': wins_losses.team.name,
         'wins': wins_losses.wins,
         'losses': wins_losses.loses,
         'ratio': ratio,
-        'league': league_shortcuts[wins_losses.league],
-        'matches': transform_matches(matches)
+        'league': LEAGUE_SHORTCUTS_TO_FULL_NAMES[wins_losses.league],
+        'past_matches': transform_matches(past_matches),
+        'next_matches': transform_matches(next_matches)
     }
 
     return transformed_team

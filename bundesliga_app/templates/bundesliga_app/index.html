@@ -1,5 +1,6 @@
 {% include 'bundesliga_app/partials/header.html' %}
     {% if matches_data %}
+        <h2>{{ league }}</h2>
         <table>
             <tr>
                 <th>Date</th>
@@ -9,14 +10,14 @@
             </tr>
         {% for match in matches_data %}
             <tr>
-                <td><a>{{ match.date }}</a></td>
-                <td><a>{{ match.team_one }}</a></td>
+                <td>{{ match.date }}</td>
+                <td><a href="/bundesliga_app/teams/{{ match.team_one_id }}">{{ match.team_one }}</a></td>
                 {% if match.points_one != None %}
-                    <td><a>{{ match.points_one }} : {{ match.points_two }}</a></td>
+                    <td>{{ match.points_one }} : {{ match.points_two }}</td>
                 {% else %}
-                    <td><a>Not finished</a></td>
+                    <td>Not finished</td>
                 {% endif %}
-                <td><a>{{ match.team_two }}</a></td>
+                <td><a href="/bundesliga_app/teams/{{ match.team_two_id }}">{{ match.team_two }}</a></td>
             </tr>
 
         {% endfor %}

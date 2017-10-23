@@ -17,3 +17,8 @@ td, th {
 #searchbox {
     text-align: right
 }
+
+a {
+    color: #2b2ba8;
+    text-decoration: none;
+}

@@ -9,6 +9,7 @@ from bundesliga_app.managers.team import (
     search_teams,
     search_team
 )
+from bundesliga_app.utils import LEAGUE_SHORTCUTS_TO_FULL_NAMES
 
 
 def index(request):
@@ -19,7 +20,8 @@ def all_matches(request, league_shortcut='bl1'):
     all_matches_data = get_all_matches(league_shortcut)
 
     context = {
-        'matches_data': all_matches_data
+        'matches_data': all_matches_data,
+        'league': LEAGUE_SHORTCUTS_TO_FULL_NAMES[league_shortcut]
     }
 
     return render(request, 'bundesliga_app/index.html', context)
@@ -29,7 +31,8 @@ def next_matches(request, league_shortcut):
     next_matches_data = get_next_matches(league_shortcut)
 
     context = {
-        'matches_data': next_matches_data
+        'matches_data': next_matches_data,
+        'league': LEAGUE_SHORTCUTS_TO_FULL_NAMES[league_shortcut]
     }
 
     return render(request, 'bundesliga_app/index.html', context)
@@ -39,7 +42,8 @@ def win_loss_ratio(request, league_shortcut):
     win_loss_ratio_data = win_loss_ratios(league_shortcut)
 
     context = {
-        'win_loss_ratio_data': win_loss_ratio_data
+        'win_loss_ratio_data': win_loss_ratio_data,
+        'league': LEAGUE_SHORTCUTS_TO_FULL_NAMES[league_shortcut]
     }
 
     return render(request, 'bundesliga_app/win_loss_ratio.html', context)

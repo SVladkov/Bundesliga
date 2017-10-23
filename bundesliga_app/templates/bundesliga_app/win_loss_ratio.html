@@ -1,5 +1,6 @@
 {% include 'bundesliga_app/partials/header.html' %}
     {% if win_loss_ratio_data %}
+        <h2>{{ league }}</h2>
         <table>
             <tr>
                 <th>Team</th>
@@ -9,10 +10,10 @@
             </tr>
         {% for team in win_loss_ratio_data %}
             <tr>
-                <td><a>{{ team.team_name }}</a></td>
-                <td><a>{{ team.wins }}</a></td>
-                <td><a>{{ team.losses }}</a></td>
-                <td><a>{{ team.ratio }}</a></td>
+                <td>{{ team.team_name }}</td>
+                <td>{{ team.wins }}</td>
+                <td>{{ team.losses }}</td>
+                <td>{{ team.ratio }}</td>
             </tr>
 
         {% endfor %}

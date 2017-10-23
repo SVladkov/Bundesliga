@@ -47,7 +47,7 @@ def get_unfinished_matches(league_shortcut, league_season):
 
 
 def get_all_matches(league_shortcut, league_season):
-    matches = Match.objects.filter(league=league_shortcut, season=league_season)
+    matches = Match.objects.filter(league=league_shortcut, season=league_season).order_by('date')
 
     return matches
 
@@ -65,7 +65,6 @@ def get_wins_losses(league_shortcut, league_season):
 
 
 def get_teams_with_name(team_name):
-    #teams = Wins_Losses_Season.objects.filter(team__name__icontains='Leipzig').select_related()
     teams = Team.objects.filter(name__icontains=team_name)
 
     return teams
@@ -77,7 +76,17 @@ def get_wins_losses_for_team(team_id):
     return wins_losses_for_team
 
 
-def get_matches_for_team(team_id):
-    matches = Match.objects.filter(Q(team_one_id=team_id) | Q(team_two_id=team_id)).select_related()
+def get_past_matches_for_team(team_id):
+    matches = Match.objects.filter(Q(team_one_id=team_id) | Q(team_two_id=team_id), is_finished=True)\
+                           .select_related()\
+                           .order_by('date')
+
+    return matches
+
+
+def get_next_matches_for_team(team_id):
+    matches = Match.objects.filter(Q(team_one_id=team_id) | Q(team_two_id=team_id), is_finished=False)\
+                           .select_related()\
+                           .order_by('date')
 
     return matches
